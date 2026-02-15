@@ -8,32 +8,39 @@ export const analyzeDocument = async (text: string) => {
   const prompt = `
     Analyze the following project documentation and extract a structured list of milestones, issues, and sub-tasks.
     
-    Output the result STRICTLY as a JSON object with the following structure:
+    CRITICAL RULES:
+    1. Output the result STRICTLY as a JSON object. No other text.
+    2. Use unique IDs for everything. For recommendations, use strings like "rec_1", "rec_2", etc.
+    3. Identify "parent issues" and "sub-tasks". If an issue is a sub-component of another, set its "parentId" to the ID of the parent.
+    4. Group issues by Milestone whenever possible.
+    5. Be professional and technical in issue descriptions.
+
+    JSON STRUCTURE:
     {
       "milestones": [
         {
-          "id": "temp_m1",
+          "id": "m1",
           "title": "Milestone Title",
           "description": "Short description"
         }
       ],
       "issues": [
         {
-          "id": "temp_i1",
-          "title": "Issue Title",
-          "description": "Detailed description",
-          "milestoneId": "temp_m1",
-          "labels": ["Type", "Priority"],
+          "id": "rec_1",
+          "title": "Main Task Title",
+          "description": "Detailed technical description",
+          "milestoneId": "m1",
+          "labels": ["Backend", "High Priority"],
           "parentId": null,
           "type": "draft"
         },
         {
-          "id": "temp_i2",
-          "title": "Sub-task Title",
-          "description": "Description",
-          "milestoneId": "temp_m1",
-          "labels": ["Sub-task"],
-          "parentId": "temp_i1",
+          "id": "rec_2",
+          "title": "Sub-task for rec_1",
+          "description": "Specific technical step",
+          "milestoneId": "m1",
+          "labels": ["Task"],
+          "parentId": "rec_1",
           "type": "draft"
         }
       ]

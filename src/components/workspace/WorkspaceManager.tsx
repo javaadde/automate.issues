@@ -27,11 +27,15 @@ interface Milestone {
 export function WorkspaceManager({ 
   initialIssues, 
   initialMilestones, 
-  repoName 
+  repoName,
+  showDocInput,
+  setShowDocInput
 }: { 
   initialIssues: any[], 
   initialMilestones: any[],
-  repoName: string
+  repoName: string,
+  showDocInput: boolean,
+  setShowDocInput: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [issues, setIssues] = useState<Issue[]>(() => {
     return initialIssues.map(i => ({
@@ -51,8 +55,8 @@ export function WorkspaceManager({
   
   const [isLoading, setIsLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
-  const [showDocInput, setShowDocInput] = useState(false);
   const [docText, setDocText] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const toggleSelection = (id: string | number) => {
@@ -96,6 +100,9 @@ export function WorkspaceManager({
 
     try {
       const formData = new FormData();
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+      }
       formData.append("text", docText);
       const result = await analyzeProjectDoc(formData);
 
@@ -106,12 +113,13 @@ export function WorkspaceManager({
       } else {
         alert(result.error || "Failed to analyze document");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("An unexpected error occurred during analysis.");
+      alert(error.message || "An unexpected error occurred during analysis.");
     } finally {
       setIsLoading(false);
       setDocText("");
+      setSelectedFile(null);
     }
   };
 
@@ -193,20 +201,62 @@ export function WorkspaceManager({
                    <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
-              <p className="text-slate-500 mb-4 text-sm">Paste your PRD, requirement list, or project notes below. Gemini will extract milestones and issues automatically.</p>
+              <div 
+                className="group relative border-2 border-dashed border-slate-200 rounded-2xl p-6 mb-6 hover:border-primary/50 hover:bg-primary/5 transition-all text-center cursor-pointer"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const file = e.dataTransfer.files[0];
+                  if (file) {
+                    setSelectedFile(file);
+                    if (file.type !== "application/pdf") {
+                      const reader = new FileReader();
+                      reader.onload = (e) => setDocText(e.target?.result as string);
+                      reader.readAsText(file);
+                    } else {
+                      setDocText(`File selected: ${file.name} (PDF)`);
+                    }
+                  }
+                }}
+                onClick={() => document.getElementById('file-upload')?.click()}
+              >
+                <input 
+                  id="file-upload" 
+                  type="file" 
+                  className="hidden" 
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setSelectedFile(file);
+                      if (file.type !== "application/pdf") {
+                        const reader = new FileReader();
+                        reader.onload = (e) => setDocText(e.target?.result as string);
+                        reader.readAsText(file);
+                      } else {
+                        setDocText(`File selected: ${file.name} (PDF)`);
+                      }
+                    }
+                  }}
+                />
+                <span className="material-symbols-outlined text-4xl text-slate-300 group-hover:text-primary transition-colors mb-2">cloud_upload</span>
+                <p className="text-sm font-bold text-slate-600">Click or drag a file here</p>
+                <p className="text-[10px] text-slate-400 mt-1 uppercase font-black">Supports .txt, .md, .prd</p>
+              </div>
+
               <textarea 
                 value={docText}
                 onChange={(e) => setDocText(e.target.value)}
-                placeholder="Example: We need to build a login page. Milestone 1 is Auth Setup. Issues: 1. Setup NextAuth. 2. Configure Providers..."
-                className="w-full h-64 p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-primary/20 transition-all resize-none mb-6 text-sm"
+                placeholder="Or paste your technical requirements directly here..."
+                className="w-full h-48 p-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-primary/20 transition-all resize-none mb-6 text-sm"
               />
               <div className="flex gap-3">
                 <button 
                   onClick={handleAIAnalysis}
-                  className="flex-1 bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20"
+                  disabled={!docText.trim() && !selectedFile}
+                  className="flex-1 bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 transition-all shadow-lg shadow-primary/20"
                 >
                   <span className="material-symbols-outlined">psychology</span>
-                  Analyze with Gemini
+                  Analyze with Gemini AI
                 </button>
               </div>
             </div>
@@ -228,16 +278,9 @@ export function WorkspaceManager({
 
       <div className="flex items-center justify-between gap-4">
          <div className="flex-1">
-            <h2 className="text-2xl font-bold">Issue Planner</h2>
-            <p className="text-sm text-slate-500">Analyze documentation and sync approved tasks to GitHub.</p>
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Project Tasks</h2>
+            <p className="text-sm text-slate-500">Manage and sync your AI-generated recommendations.</p>
          </div>
-         <button 
-           onClick={() => setShowDocInput(true)}
-           className="px-6 py-3 bg-white border border-primary/20 text-primary font-bold rounded-xl flex items-center gap-2 hover:bg-primary/5 transition-colors shadow-sm"
-         >
-           <span className="material-symbols-outlined">add_circle</span>
-           Add Document
-         </button>
       </div>
 
       <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md p-4 rounded-xl border border-primary/10 flex items-center justify-between shadow-sm">
@@ -271,39 +314,61 @@ export function WorkspaceManager({
           const mIssues = issuesByMilestone[milestone.id] || [];
           const allSelected = mIssues.length > 0 && mIssues.every(i => selectedIds.has(i.id));
           
-          return (
-            <section key={milestone.id} className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div 
-                    onClick={() => toggleMilestone(milestone.id)}
-                    className={`size-6 rounded border cursor-pointer flex items-center justify-center transition-all ${allSelected ? 'bg-primary border-primary' : 'border-slate-300'}`}
-                  >
-                    {allSelected && <span className="material-symbols-outlined text-white text-[16px]">check</span>}
-                  </div>
-                  <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="material-symbols-outlined">flag</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold">{milestone.title}</h3>
-                    {milestone.due_on && (
-                      <p className="text-xs text-slate-500 font-medium">Target: {new Date(milestone.due_on).toLocaleDateString()}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="grid gap-3 pl-14 relative">
-                <div className="absolute left-5 top-0 bottom-0 w-[2px] bg-slate-100"></div>
-                {mIssues.map(issue => (
+          // Separate top-level issues and build child map
+          const topLevel = mIssues.filter(i => !i.parentId || !mIssues.find(p => p.id === i.parentId));
+          const childrenMap = mIssues.reduce((acc, i) => {
+            if (i.parentId) {
+              if (!acc[i.parentId]) acc[i.parentId] = [];
+              acc[i.parentId].push(i);
+            }
+            return acc;
+          }, {} as Record<string | number, Issue[]>);
+
+          const renderIssueTree = (issue: Issue, depth = 0) => {
+            const children = childrenMap[issue.id] || [];
+            return (
+              <div key={issue.id} className="space-y-3">
+                <div style={{ marginLeft: `${depth * 2}rem` }}>
                   <InteractiveIssueCard 
-                    key={issue.id} 
                     issue={issue}
                     isSelected={selectedIds.has(issue.id)}
                     isApproved={approvedIds.has(issue.id)}
                     onSelect={() => toggleSelection(issue.id)}
                   />
-                ))}
+                </div>
+                {children.map(child => renderIssueTree(child, depth + 1))}
+              </div>
+            );
+          };
+
+          return (
+            <section key={milestone.id} className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div 
+                    onClick={() => toggleMilestone(milestone.id)}
+                    className={`size-6 rounded-lg border cursor-pointer flex items-center justify-center transition-all ${allSelected ? 'bg-primary border-primary shadow-lg shadow-primary/20' : 'border-slate-300 hover:border-primary/50'}`}
+                  >
+                    {allSelected && <span className="material-symbols-outlined text-white text-[16px]">check</span>}
+                  </div>
+                  <div className="size-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-3xl">flag</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900">{milestone.title}</h3>
+                    <div className="flex items-center gap-3 mt-1">
+                       <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Phase</span>
+                       {milestone.due_on && (
+                         <span className="text-xs text-slate-500 font-medium">Due {new Date(milestone.due_on).toLocaleDateString()}</span>
+                       )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid gap-4 pl-16 relative">
+                <div className="absolute left-[34px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-slate-200 via-slate-100 to-transparent"></div>
+                {topLevel.map(issue => renderIssueTree(issue))}
               </div>
             </section>
           );
