@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IssueGen Workspace - Dark Theme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2d2db9",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f0f12",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2d2db933;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #2d2db966;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex flex-col border-r border-primary/10 bg-white/5 backdrop-blur-sm">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">conversion_path</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">IssueGen</h2>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary border border-primary/20" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Drafts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">checklist</span>
+<span class="font-medium">Issues</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-medium">Milestones</span>
+</a>
+<div class="pt-4 pb-2">
+<p class="px-3 text-xs font-semibold text-primary uppercase tracking-wider">Project</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-primary/10">
+<div class="flex items-center gap-3 p-2">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUJ-PoBnsSNdoVkiCv8fY0wim7JqqFGlyvTeVtk_rSDyt9BJfMTQbsQiRUHP3hg9qAnTrsrGw5LaAH5DBkWqkUGeMwU7b2-wdc2TVCLhLhgtiBnc28y9djVeG1w3K75QhPs18NdsOOkXi2ndleu4f9gta5sBHG6z3WUB8aebyfKRGnhYocv6OXohDwOb28emE6RiNKDq51Zh2VUyBdR5ZJrEGUkOt0QNWmulNs8MxZXsVcJ6r1iGkYCsY5COj2aN6vTuFHSkd0BTuv"/>
+</div>
+<div>
+<p class="text-sm font-bold">Alex Rivera</p>
+<p class="text-xs text-primary/70">Pro Account</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col relative overflow-hidden">
+<!-- Top Header -->
+<header class="h-16 border-b border-primary/10 flex items-center justify-between px-8 bg-background-dark/50 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-sm">
+<span class="text-slate-500">Workspace</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="font-medium">Project Alpha</span>
+</div>
+<div class="px-2 py-0.5 rounded bg-primary/10 text-[10px] font-bold text-primary uppercase border border-primary/20">v1.0.4-stable</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg">search</span>
+<input class="bg-white/5 border border-primary/10 rounded-lg pl-10 pr-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 w-64 transition-all" placeholder="Search workspace..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-bold transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">sync</span>
+                        Sync to GitHub
+                    </button>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden">
+<!-- Drafting Area -->
+<section class="flex-1 flex flex-col p-8 custom-scrollbar overflow-y-auto">
+<div class="max-w-4xl w-full mx-auto space-y-8">
+<div>
+<h1 class="text-4xl font-black tracking-tight text-white mb-2">Workspace Editor</h1>
+<p class="text-slate-400 text-lg">Transform meeting notes or project requirements into structured GitHub issues instantly.</p>
+</div>
+<!-- Editor Card -->
+<div class="bg-white/5 border border-primary/10 rounded-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-primary/10 flex items-center justify-between bg-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+<span class="text-sm font-semibold uppercase tracking-wider">Input Requirements</span>
+</div>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-white/10 rounded text-slate-400" title="Attach Files">
+<span class="material-symbols-outlined text-xl">attach_file</span>
+</button>
+<button class="p-1.5 hover:bg-white/10 rounded text-slate-400" title="Templates">
+<span class="material-symbols-outlined text-xl">description</span>
+</button>
+</div>
+</div>
+<textarea class="w-full h-80 bg-transparent border-none focus:ring-0 p-6 text-slate-300 placeholder:text-slate-600 resize-none font-display leading-relaxed" placeholder="Paste your project requirements, technical specifications, or meeting transcriptions here..."></textarea>
+<div class="p-4 border-t border-primary/10 flex justify-end items-center gap-4">
+<span class="text-xs text-slate-500 italic">AI will automatically group related tasks into milestones</span>
+<button class="px-6 py-2.5 bg-primary text-white rounded-lg font-bold hover:brightness-110 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+                                    Generate Issues
+                                </button>
+</div>
+</div>
+<!-- Extracted Issues List -->
+<div class="space-y-4">
+<h3 class="text-xl font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">list_alt</span>
+                                Generated Drafts
+                            </h3>
+<div class="grid gap-3">
+<!-- Issue Card 1 -->
+<div class="p-4 rounded-xl border border-primary/10 bg-white/5 hover:border-primary/40 transition-colors group">
+<div class="flex items-start justify-between mb-2">
+<h4 class="font-bold text-white text-lg group-hover:text-primary transition-colors">Implement OAuth2 Authentication Flow</h4>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-slate-300">more_horiz</span>
+</div>
+<p class="text-slate-400 text-sm mb-4">Set up secure login using GitHub and Google providers with JWT session handling.</p>
+<div class="flex items-center gap-3">
+<span class="px-2 py-1 rounded bg-orange-500/10 text-orange-500 text-[10px] font-bold uppercase border border-orange-500/20">High Priority</span>
+<span class="px-2 py-1 rounded bg-blue-500/10 text-blue-500 text-[10px] font-bold uppercase border border-blue-500/20">Security</span>
+<div class="ml-auto flex -space-x-2">
+<div class="size-6 rounded-full border-2 border-background-dark bg-slate-700"></div>
+<div class="size-6 rounded-full border-2 border-background-dark bg-primary flex items-center justify-center text-[10px] font-bold">+2</div>
+</div>
+</div>
+</div>
+<!-- Issue Card 2 -->
+<div class="p-4 rounded-xl border border-primary/10 bg-white/5 hover:border-primary/40 transition-colors group">
+<div class="flex items-start justify-between mb-2">
+<h4 class="font-bold text-white text-lg group-hover:text-primary transition-colors">Responsive Dashboard Redesign</h4>
+<span class="material-symbols-outlined text-slate-600 group-hover:text-slate-300">more_horiz</span>
+</div>
+<p class="text-slate-400 text-sm mb-4">Update the main layout to support tablet and mobile viewport sizes with improved sidebar.</p>
+<div class="flex items-center gap-3">
+<span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase border border-emerald-500/20">UI/UX</span>
+<span class="px-2 py-1 rounded bg-slate-500/10 text-slate-400 text-[10px] font-bold uppercase border border-slate-500/20">Frontend</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Milestone Sidebar -->
+<aside class="w-80 border-l border-primary/10 bg-white/[0.02] p-6 flex flex-col gap-6 overflow-y-auto custom-scrollbar">
+<h3 class="text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">timeline</span>
+                        Milestone Extraction
+                    </h3>
+<div class="relative space-y-0 pb-8">
+<!-- Vertical line -->
+<div class="absolute left-3.5 top-2 bottom-0 w-[2px] bg-primary/20"></div>
+<!-- Milestone 1 -->
+<div class="relative pl-10 pb-10">
+<div class="absolute left-0 top-1.5 size-7 rounded-full bg-primary flex items-center justify-center text-white ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-sm">check</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-primary uppercase mb-1">Phase 1: Foundation</span>
+<h4 class="text-white font-bold leading-tight mb-2">Infrastructure &amp; Core API Integration</h4>
+<div class="bg-primary/5 rounded-lg border border-primary/10 p-3">
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-400">Progress</span>
+<span class="text-primary font-bold">100%</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-2">Completed: Oct 12</p>
+</div>
+</div>
+</div>
+<!-- Milestone 2 -->
+<div class="relative pl-10 pb-10">
+<div class="absolute left-0 top-1.5 size-7 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center text-primary ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-sm">sync</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-primary uppercase mb-1">Phase 2: Development</span>
+<h4 class="text-white font-bold leading-tight mb-2">Feature Implementation &amp; Auth</h4>
+<div class="bg-primary/5 rounded-lg border border-primary/10 p-3">
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-400">Progress</span>
+<span class="text-primary font-bold">45%</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[45%] shadow-[0_0_10px_#2d2db9]"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-2">Estimated: Nov 05</p>
+</div>
+</div>
+</div>
+<!-- Milestone 3 -->
+<div class="relative pl-10 pb-10">
+<div class="absolute left-0 top-1.5 size-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-500 ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-500 uppercase mb-1">Phase 3: Launch</span>
+<h4 class="text-slate-400 font-bold leading-tight mb-2">Production Release &amp; Scaling</h4>
+<div class="bg-white/5 rounded-lg border border-white/5 p-3">
+<div class="flex justify-between text-[10px] mb-2">
+<span class="text-slate-600">Pending</span>
+<span class="text-slate-600">0%</span>
+</div>
+<div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-slate-700 w-0"></div>
+</div>
+<p class="text-[10px] text-slate-700 mt-2">Target: Nov 15</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6 border-t border-primary/10">
+<div class="bg-primary/10 border border-primary/20 p-4 rounded-xl">
+<p class="text-sm font-bold text-white mb-1">AI Recommendation</p>
+<p class="text-xs text-slate-400">Found 4 tasks related to "API Security" that should be grouped under Milestone 2.</p>
+<button class="w-full mt-3 py-2 text-xs font-bold text-white bg-primary rounded hover:brightness-110 transition-all">Merge Tasks</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</body></html>
