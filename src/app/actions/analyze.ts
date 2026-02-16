@@ -1,6 +1,7 @@
 "use server";
 
 import { analyzeDocument } from "@/lib/gemini";
+import path from "path";
 
 export async function analyzeProjectDoc(formData: FormData) {
   try {
@@ -14,16 +15,25 @@ export async function analyzeProjectDoc(formData: FormData) {
         try {
           // Use a more reliable way to import pdfjs in Next.js Server Actions
           const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+
+          // Set worker source to the absolute path in node_modules
+          pdfjs.GlobalWorkerOptions.workerSrc = path.join(
+            process.cwd(),
+            "node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
+          );
+
           const arrayBuffer = await file.arrayBuffer();
           const loadingTask = pdfjs.getDocument({
             data: new Uint8Array(arrayBuffer),
             useSystemFonts: true,
             disableFontFace: true,
+            // @ts-ignore
+            verbosity: 0,
           });
-          
+
           const pdf = await loadingTask.promise;
           let fullText = "";
-          
+
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
@@ -36,7 +46,10 @@ export async function analyzeProjectDoc(formData: FormData) {
           content = fullText;
         } catch (err: any) {
           console.error("PDF Parsing Error:", err);
-          return { success: false, error: "Failed to parse PDF: " + err.message };
+          return {
+            success: false,
+            error: "Failed to parse PDF: " + err.message,
+          };
         }
       } else {
         content = await file.text();
@@ -44,14 +57,20 @@ export async function analyzeProjectDoc(formData: FormData) {
     }
 
     if (!content || content.trim().length < 10) {
-      return { success: false, error: "The document is too short or empty. Please provide more details." };
+      return {
+        success: false,
+        error:
+          "The document is too short or empty. Please provide more details.",
+      };
     }
 
     const analysis = await analyzeDocument(content);
     return { success: true, data: analysis };
-
   } catch (error: any) {
     console.error("Analysis Action Critical Error:", error);
-    return { success: false, error: error.message || "An internal error occurred during analysis." };
+    return {
+      success: false,
+      error: error.message || "An internal error occurred during analysis.",
+    };
   }
 }
